@@ -11,7 +11,7 @@ import java.util.Optional;
 @Service
 public class ProductServiceImpl implements ProductService {
 
-    private ProductRepository productRepository;
+    private final ProductRepository productRepository;
 
     public ProductServiceImpl(ProductRepository productRepository) {
         this.productRepository = productRepository;
@@ -25,5 +25,11 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Optional<Product> getProductById(long id) {
         return productRepository.getProductById(id);
+    }
+
+    @Override
+    public boolean addProduct(Product product) {
+        productRepository.addProduct(product);
+        return true;
     }
 }

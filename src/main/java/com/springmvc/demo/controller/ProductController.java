@@ -4,13 +4,13 @@ import com.springmvc.demo.domain.Product;
 import com.springmvc.demo.service.ProductService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
-@RequestMapping("/product")
+@RequestMapping("/products")
 public class ProductController {
 
     private final ProductService productService;
@@ -24,5 +24,24 @@ public class ProductController {
         List<Product> products = productService.getProducts();
         model.addAttribute("products", products);
         return "products";
+    }
+    @RequestMapping(value="/{id}", method = RequestMethod.GET)
+    public String getProductById(Model model, @PathVariable(value = "id") Long id) {
+        Optional<Product> product = productService.getProductById(id);
+        model.addAttribute("product", product);
+        return "productById";
+    }
+
+    @RequestMapping(value="/addProduct", method = RequestMethod.GET)
+    public String addProductForm(Model model) {
+        model.addAttribute("product", new Product());
+        return "addProduct";
+    }
+
+    @RequestMapping(value="/addProduct", method = RequestMethod.POST)
+    public String createNewProduct(@ModelAttribute Product product, Model model) {
+        productService.addProduct(product);
+        model.addAttribute("product", product);
+        return "redirect:/products";
     }
 }

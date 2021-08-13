@@ -9,4 +9,5 @@ public interface ProductRepository {
 
     List<Product> getProducts();
     Optional<Product> getProductById(long id);
+    boolean addProduct(Product product);
 }
