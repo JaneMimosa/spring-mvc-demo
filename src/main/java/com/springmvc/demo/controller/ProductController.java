@@ -25,20 +25,20 @@ public class ProductController {
         model.addAttribute("products", products);
         return "products";
     }
-    @RequestMapping(value="/{id}", method = RequestMethod.GET)
+    @GetMapping("/{id}")
     public String getProductById(Model model, @PathVariable(value = "id") Long id) {
         Optional<Product> product = productService.getProductById(id);
         model.addAttribute("product", product);
         return "productById";
     }
 
-    @RequestMapping(value="/addProduct", method = RequestMethod.GET)
+    @GetMapping("/addProduct")
     public String addProductForm(Model model) {
         model.addAttribute("product", new Product());
         return "addProduct";
     }
 
-    @RequestMapping(value="/addProduct", method = RequestMethod.POST)
+    @PostMapping("/addProduct")
     public String createNewProduct(@ModelAttribute Product product, Model model) {
         productService.addProduct(product);
         model.addAttribute("product", product);

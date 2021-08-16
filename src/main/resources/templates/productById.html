@@ -6,8 +6,8 @@
 </head>
 <body>
 <h1>Продукт</h1>
-<p th:text="'id: ' + ${product.id}" />
-<p th:text="'name: ' + ${product.name}" />
-<p th:text="'price: ' + ${product.price}" />
+<p th:text="'id: ' + ${product.get().getId()}" />
+<p th:text="'name: ' + ${product.get().getName()}" />
+<p th:text="'price: ' + ${product.get().getPrice()}" />
 </body>
 </html>
