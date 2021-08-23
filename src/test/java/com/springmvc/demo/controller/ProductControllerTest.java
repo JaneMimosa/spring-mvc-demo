@@ -14,6 +14,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.Collections;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
@@ -25,7 +26,7 @@ class ProductControllerTest extends SpringMvcDemoApplicationTests {
     @MockBean
     private ProductService productService;
 
-    Product product = new Product(1,"title", 100);
+    Product product = new Product(1L, "title", 100);
 
     @BeforeEach
     public void setUp() {
@@ -35,8 +36,6 @@ class ProductControllerTest extends SpringMvcDemoApplicationTests {
         Mockito.when(productService.getProductById(Mockito.anyLong()))
                 .thenReturn(java.util.Optional.ofNullable(product));
 
-        Mockito.when(productService.addProduct(Mockito.any()))
-                .thenReturn(true);
 
     }
 
@@ -52,20 +51,18 @@ class ProductControllerTest extends SpringMvcDemoApplicationTests {
     void getProductById() throws Exception {
         mockMvc.perform(get("/products/1"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("productById"))
+                .andExpect(view().name("products"))
                 .andExpect(model().attribute("product", java.util.Optional.ofNullable(product)));
     }
 
     @Test
     void addProductForm() throws Exception {
-        mockMvc.perform(get("/products/addProduct"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("addProduct"))
-                .andExpect(model().attributeExists("product"));
+        mockMvc.perform(post("/addProducts")
+                        .param("id", "1l")
+                        .param("name", "title")
+                        .param("price", "500"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/products"));
     }
 
-    @Test
-    void createNewProduct() throws Exception {
-
-    }
 }
