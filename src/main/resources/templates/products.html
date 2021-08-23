@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Продукты</title>
 </head>
 <body>
 <h1>Продукты</h1>
@@ -12,6 +12,7 @@
         <th>ID</th>
         <th>Наименование</th>
         <th>Стоимость</th>
+        <th>Категория</th>
     </tr>
     </thead>
     <tbody>
@@ -19,6 +20,7 @@
         <td th:text="${p.id}"/>
         <td th:text="${p.name}"/>
         <td th:text="${p.price}"/>
+        <td> <a th:text="${p.category.name}" th:href="@{/products/categories/{category}(category=${p.category.name})}"/> </td>
     </tr>
     </tbody>
 </table>
