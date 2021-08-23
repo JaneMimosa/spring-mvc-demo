@@ -20,9 +20,9 @@ public class ProductRepositoryImpl implements ProductRepository {
         Random rand = new Random();
         productList = new ArrayList<>();
         int price;
-        for (int i = 1; i < 10; i++) {
+        for (int i = 1; i <= 10; i++) {
             price = rand.nextInt(10000);
-            productList.add(new Product(i,"title " + i, price));
+            productList.add(new Product(i, "title " + i, price));
         }
     }
 
@@ -33,11 +33,17 @@ public class ProductRepositoryImpl implements ProductRepository {
 
     @Override
     public Optional<Product> getProductById(long id) {
-        for (Product p: productList) {
-            if(p.getId() == id) {
+        for (Product p : productList) {
+            if (p.getId() == id) {
                 return Optional.of(p);
             }
         }
         return Optional.empty();
+    }
+
+    @Override
+    public boolean addProduct(Product product) {
+        productList.add(product);
+        return true;
     }
 }
