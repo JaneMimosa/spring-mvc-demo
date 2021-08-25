@@ -15,5 +15,6 @@
         <property name="current_session_context_class">thread</property>
 
         <mapping class="com.springmvc.demo.domain.Product"/>
+        <mapping class="com.springmvc.demo.domain.Category"/>
     </session-factory>
 </hibernate-configuration>

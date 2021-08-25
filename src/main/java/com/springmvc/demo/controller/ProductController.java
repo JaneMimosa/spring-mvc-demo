@@ -1,5 +1,6 @@
 package com.springmvc.demo.controller;
 
+import com.springmvc.demo.domain.Category;
 import com.springmvc.demo.domain.Product;
 import com.springmvc.demo.service.ProductService;
 import org.springframework.stereotype.Controller;
@@ -32,9 +33,18 @@ public class ProductController {
         return "productById";
     }
 
+    @GetMapping("categories/{category}")
+    public String getProductByCategory(Model model, @PathVariable(value = "category") String category) {
+        List<Product> products = productService.getProductsByCategory(category);
+        model.addAttribute("products", products);
+        return "products";
+    }
+
     @GetMapping("/addProduct")
     public String addProductForm(Model model) {
+        List<Category> categoryList = productService.getCategories();
         model.addAttribute("product", new Product());
+        model.addAttribute("categories", categoryList);
         return "addProduct";
     }
 

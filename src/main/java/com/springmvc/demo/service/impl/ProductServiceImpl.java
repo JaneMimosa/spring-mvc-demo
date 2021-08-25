@@ -1,5 +1,6 @@
 package com.springmvc.demo.service.impl;
 
+import com.springmvc.demo.domain.Category;
 import com.springmvc.demo.domain.Product;
 import com.springmvc.demo.repository.ProductRepository;
 import com.springmvc.demo.service.ProductService;
@@ -32,4 +33,12 @@ public class ProductServiceImpl implements ProductService {
         productRepository.addProduct(product);
         return true;
     }
+    public List<Category> getCategories() {
+        return productRepository.getCategories();
+    }
+
+    public List<Product> getProductsByCategory(String category) {
+        return productRepository.getProductsByCategory(category);
+    }
+
 }

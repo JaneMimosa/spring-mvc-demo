@@ -1,6 +1,7 @@
 package com.springmvc.demo.repository.impl;
 
 import com.springmvc.demo.component.HibernateSessionFactory;
+import com.springmvc.demo.domain.Category;
 import com.springmvc.demo.domain.Product;
 import com.springmvc.demo.repository.ProductRepository;
 import lombok.AllArgsConstructor;
@@ -20,7 +21,7 @@ public class ProductRepositoryImpl implements ProductRepository {
     public List<Product> getProducts() {
         try (Session session = sessionFactory.getSession()) {
             session.beginTransaction();
-            List<Product> productList = session.createQuery("FROM Product", Product.class)
+            List<Product> productList = session.createQuery("FROM Product ORDER BY id", Product.class)
                     .getResultList();
             session.getTransaction().commit();
             return productList;
@@ -46,6 +47,27 @@ public class ProductRepositoryImpl implements ProductRepository {
             session.save(product);
             session.getTransaction().commit();
             return true;
+        }
+    }
+
+    public List<Category> getCategories() {
+        try (Session session = sessionFactory.getSession()) {
+            session.beginTransaction();
+            List<Category> categoryList = session.createQuery("FROM Category", Category.class)
+                    .getResultList();
+            session.getTransaction().commit();
+            return categoryList;
+        }
+    }
+
+    public List<Product> getProductsByCategory(String category) {
+        try (Session session = sessionFactory.getSession()) {
+            session.beginTransaction();
+            List<Product> productFromBD = session.createQuery("SELECT p from Product p WHERE p.category.name = :category", Product.class)
+                    .setParameter("category", category)
+                    .getResultList();
+            session.getTransaction().commit();
+            return productFromBD;
         }
     }
 }
