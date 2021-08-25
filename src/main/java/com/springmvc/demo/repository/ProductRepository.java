@@ -1,16 +1,17 @@
 package com.springmvc.demo.repository;
 
-import com.springmvc.demo.domain.Category;
 import com.springmvc.demo.domain.Product;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
-public interface ProductRepository {
+@Repository
+public interface ProductRepository extends JpaRepository<Product, Long> {
 
-    List<Product> getProducts();
-    Optional<Product> getProductById(long id);
-    boolean addProduct(Product product);
-    List<Category> getCategories();
-    List<Product> getProductsByCategory(String category);
+    List<Product> findByCategoryNameLike(String category);
+
+    List<Product> findByPriceGreaterThanEqualAndPriceLessThanEqual(int minPrice, int maxPrice);
+
+    List<Product> findByNameStartingWith(String text);
 }

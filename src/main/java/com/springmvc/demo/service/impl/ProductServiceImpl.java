@@ -1,6 +1,5 @@
 package com.springmvc.demo.service.impl;
 
-import com.springmvc.demo.domain.Category;
 import com.springmvc.demo.domain.Product;
 import com.springmvc.demo.repository.ProductRepository;
 import com.springmvc.demo.service.ProductService;
@@ -19,26 +18,32 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<Product> getProducts() {
-        return productRepository.getProducts();
+    public List<Product> findAll() {
+        return productRepository.findAll();
     }
 
     @Override
-    public Optional<Product> getProductById(long id) {
-        return productRepository.getProductById(id);
+    public Optional<Product> findById(long id) {
+        return productRepository.findById(id);
     }
 
     @Override
-    public boolean addProduct(Product product) {
-        productRepository.addProduct(product);
-        return true;
-    }
-    public List<Category> getCategories() {
-        return productRepository.getCategories();
+    public Product save(Product product) {
+        return productRepository.save(product);
     }
 
-    public List<Product> getProductsByCategory(String category) {
-        return productRepository.getProductsByCategory(category);
+    @Override
+    public List<Product> findByCategoryNameLike(String category) {
+        return productRepository.findByCategoryNameLike(category);
     }
 
+    @Override
+    public List<Product> findByPriceGreaterThanEqualAndPriceLessThanEqual(int minPrice, int maxPrice) {
+        return productRepository.findByPriceGreaterThanEqualAndPriceLessThanEqual(minPrice, maxPrice);
+    }
+
+    @Override
+    public List<Product> findByNameStartingWith(String text) {
+        return productRepository.findByNameStartingWith(text);
+    }
 }

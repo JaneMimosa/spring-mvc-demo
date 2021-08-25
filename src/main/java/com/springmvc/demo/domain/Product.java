@@ -21,7 +21,7 @@ public class Product {
     private String name;
     @Column
     private int price;
-    @ManyToOne(cascade=CascadeType.PERSIST)
+    @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
 
