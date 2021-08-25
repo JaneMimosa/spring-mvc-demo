@@ -1,49 +1,51 @@
 package com.springmvc.demo.repository.impl;
 
+import com.springmvc.demo.component.HibernateSessionFactory;
 import com.springmvc.demo.domain.Product;
 import com.springmvc.demo.repository.ProductRepository;
+import lombok.AllArgsConstructor;
+import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
-import javax.annotation.PostConstruct;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 
 @Repository
+@AllArgsConstructor
 public class ProductRepositoryImpl implements ProductRepository {
 
-    public List<Product> productList;
-
-    @PostConstruct
-    public void init() {
-        Random rand = new Random();
-        productList = new ArrayList<>();
-        int price;
-        for (int i = 1; i <= 10; i++) {
-            price = rand.nextInt(10000);
-            productList.add(new Product(i, "title " + i, price));
-        }
-    }
+    private final HibernateSessionFactory sessionFactory;
 
     @Override
     public List<Product> getProducts() {
-        return productList;
+        try (Session session = sessionFactory.getSession()) {
+            session.beginTransaction();
+            List<Product> productList = session.createQuery("FROM Product", Product.class)
+                    .getResultList();
+            session.getTransaction().commit();
+            return productList;
+        }
     }
 
     @Override
     public Optional<Product> getProductById(long id) {
-        for (Product p : productList) {
-            if (p.getId() == id) {
-                return Optional.of(p);
-            }
+        try (Session session = sessionFactory.getSession()) {
+            session.beginTransaction();
+            Optional<Product> productFromBD = Optional.ofNullable(session.createQuery("SELECT p from Product p WHERE p.id = :id", Product.class)
+                    .setParameter("id", id)
+                    .getSingleResult());
+            session.getTransaction().commit();
+            return productFromBD;
         }
-        return Optional.empty();
     }
 
     @Override
     public boolean addProduct(Product product) {
-        productList.add(product);
-        return true;
+        try (Session session = sessionFactory.getSession()) {
+            session.beginTransaction();
+            session.save(product);
+            session.getTransaction().commit();
+            return true;
+        }
     }
 }
