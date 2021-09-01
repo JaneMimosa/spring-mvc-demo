@@ -2,17 +2,20 @@
 
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Add new product</title>
+    <title>Добавить новый продукт</title>
 </head>
 
 <body>
 <h1>Form</h1>
 <form th:action="@{'/products/addProduct'}" th:object="${product}" method="post">
-    ID: <input type="number" th:field="*{id}" required=""/>
-    <br>
     Name: <input type="text" th:field="*{name}" required=""/>
     <br>
     Price: <input type="number" th:field="*{price}" required=""/>
+    <br>
+    Category:<select th:field="*{category.id}" class="form-control">
+    <option th:each="c : ${categories}" th:value="${c.id}" th:text="${c.name}">
+    </option>
+</select>
     <br>
     <button type="submit">Add</button>
 </form>

@@ -2,16 +2,32 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Продукты</title>
 </head>
 <body>
 <h1>Продукты</h1>
+<h3>Поиск по минимальной и максимальной цене</h3>
+<form th:action="@{'/products/price'}" method="get">
+    <input type="number"  th:name="min-price"/>
+    <input type="number"  th:name="max-price"/>
+    <button type="submit">Поиск</button>
+</form>
+<br>
+<h3>Поиск по названию</h3>
+<form th:action="@{'/products/name'}" method="get">
+    <input type="text"  th:name="text"/>
+    <button type="submit">Поиск</button>
+</form>
+<form action="/products/">
+    <button>Сбросить фильтр</button>
+</form>
 <table>
     <thead>
     <tr>
         <th>ID</th>
         <th>Наименование</th>
         <th>Стоимость</th>
+        <th>Категория</th>
     </tr>
     </thead>
     <tbody>
@@ -19,6 +35,7 @@
         <td th:text="${p.id}"/>
         <td th:text="${p.name}"/>
         <td th:text="${p.price}"/>
+        <td> <a th:text="${p.category.name}" th:href="@{/products/categories/{category}(category=${p.category.name})}"/> </td>
     </tr>
     </tbody>
 </table>
