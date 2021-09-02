@@ -1,0 +1,26 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<body>
+<nav class="navbar navbar-light bg-light" th:fragment="header" >
+    <div class="container-fluid">
+        <a class="navbar-brand mb-0 h1">Магазин</a>
+
+        <form th:action="@{'/products/addProduct'}" method="get">
+        <button class="btn btn-sm btn-outline-secondary">Добавить продукт</button>
+        </form>
+
+        <form th:action="@{'/products/addCategory'}" method="get">
+            <button class="btn btn-sm btn-outline-secondary">Добавить категорию</button>
+        </form>
+
+        <form class="d-flex" th:action="@{'/products/name'}" method="get">
+            <input class="form-control me-2" type="search" th:name="text" placeholder="Поиск по названию"/>
+            <button type="submit" class="btn btn-outline-success">Поиск</button>
+        </form>
+    </div>
+</nav>
+</body>
+</html>
