@@ -1,38 +1,39 @@
 package com.springmvc.demo.controller;
 
 import com.springmvc.demo.domain.Category;
+import com.springmvc.demo.domain.Product;
+import com.springmvc.demo.domain.dto.ProductDto;
 import com.springmvc.demo.service.CategoryService;
 import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.data.domain.Page;
+import org.springframework.web.bind.annotation.*;
 
 @AllArgsConstructor
-@Controller
+@RestController
+@RequestMapping("/api/v1/category")
 public class CategoryController {
 
     private final CategoryService categoryService;
 
-    @GetMapping("/products/addCategory")
-    public String addCategoryForm(@RequestParam(value ="id", required = false) Long id, Model model) {
-        if(id != null) {
-            Category category = categoryService.findById(id);
-            model.addAttribute("category", category);
-        } else {
-            model.addAttribute("category", new Category());
-        }
+    private final int pageSize = 10;
 
-        model.addAttribute("categories", categoryService.findAll());
 
-        return "addCategory";
+    @GetMapping("/{category}")
+    public Page<ProductDto> getProductByCategory(@RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
+                                                 @PathVariable(value = "category") String category) {
+
+        return categoryService.findProductsByAlias(category, pageNum, pageSize);
     }
 
-    @PostMapping("products/addCategory")
-    public String createNewCategory(@ModelAttribute Category category) {
-        categoryService.save(category);
-        return "redirect:/products";
+
+    @PostMapping
+    public Category createProduct(@RequestBody Category category) {
+        category.setId(0L);
+        return categoryService.save(category);
+    }
+
+    @PutMapping
+    public Category updateProduct(@RequestBody Category category) {
+        return categoryService.save(category);
     }
 }

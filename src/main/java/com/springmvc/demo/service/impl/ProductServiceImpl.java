@@ -1,19 +1,20 @@
 package com.springmvc.demo.service.impl;
 
 import com.springmvc.demo.domain.Product;
+import com.springmvc.demo.domain.dto.ProductDto;
 import com.springmvc.demo.repository.ProductRepository;
 import com.springmvc.demo.service.ProductService;
 import com.springmvc.demo.util.FileUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.persistence.EntityNotFoundException;
 import java.nio.file.Path;
-import java.util.List;
+import java.util.Optional;
 
 @AllArgsConstructor
 @Service
@@ -23,19 +24,13 @@ public class ProductServiceImpl implements ProductService {
 
 
     @Override
-    public List<Product> findAll() {
-        return productRepository.findAll();
+    public Page<ProductDto> findAll(Specification<Product> spec, int pageNum, int pageSize) {
+        return productRepository.findAll(spec, PageRequest.of(pageNum -1, pageSize)).map(ProductDto::new);
     }
 
     @Override
-    public Page<Product> findAllProductByPage(Pageable pageable) {
-        return productRepository.findAll(pageable);
-    }
-
-    @Override
-    @Transactional
-    public Product findById(long id) {
-        return productRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+    public Optional<ProductDto> findById(long id) {
+        return productRepository.findById(id).map(ProductDto::new);
     }
 
     @Override
@@ -61,21 +56,5 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void deleteProductById(Long id) {
         productRepository.deleteById(id);
-    }
-
-
-    @Override
-    public Page<Product> findByCategoriesNameLike(String category, Pageable pageable) {
-        return productRepository.findByCategoriesNameLike(category, pageable);
-    }
-
-    @Override
-    public Page<Product> findByPriceGreaterThanEqualAndPriceLessThanEqual(int minPrice, int maxPrice, Pageable pageable) {
-        return productRepository.findByPriceGreaterThanEqualAndPriceLessThanEqual(minPrice, maxPrice, pageable);
-    }
-
-    @Override
-    public Page<Product> findByNameStartingWith(String text, Pageable pageable) {
-        return productRepository.findByNameStartingWith(text, pageable);
     }
 }
