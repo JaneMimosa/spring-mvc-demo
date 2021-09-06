@@ -1,17 +1,20 @@
 package com.springmvc.demo.repository;
 
 import com.springmvc.demo.domain.Product;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
-    List<Product> findByCategoryNameLike(String category);
+    Page<Product> findByCategoriesNameLike(String category, Pageable pageable);
 
-    List<Product> findByPriceGreaterThanEqualAndPriceLessThanEqual(int minPrice, int maxPrice);
+    Page<Product> findByPriceGreaterThanEqualAndPriceLessThanEqual(int minPrice, int maxPrice, Pageable pageable);
 
-    List<Product> findByNameStartingWith(String text);
+    Page<Product> findByNameStartingWith(String text, Pageable pageable);
+
 }

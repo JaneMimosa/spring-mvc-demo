@@ -1,0 +1,60 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<body>
+<nav th:fragment="sidebar" >
+<div class="flex-shrink-0 p-3 bg-white" style="width: 280px;position: fixed">
+    <aside class="bd-sidebar">
+        <a th:href="@{/products/}" class="d-flex align-items-center pb-3 mb-3 link-dark text-decoration-none border-bottom">
+            <span class="fs-5 fw-semibold">Фильтры</span>
+        </a>
+        <ul class="list-unstyled ps-0">
+
+            <li class="mb-1">
+                <a>Поиск по минимальной и максимальной цене</a>
+                <ul>
+                    <form th:action="@{'/products/price'}" method="get">
+
+                        <li class="input-group">
+                            <input type="number" th:name="min-price" placeholder="минимальная цена"/>
+                        </li>
+
+                        <li class="input-group">
+                            <input type="number" th:name="max-price" placeholder="максимальная цена"/>
+                        </li>
+
+                        <li class="input-group">
+                            <button type="submit" class="btn btn-primary btn-sm">Поиск</button>
+                        </li>
+                    </form>
+                </ul>
+
+            <li class="mb-1">
+                <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#categories-collapse" aria-expanded="true">
+                    Категории
+                </button>
+
+                <div class="collapse show" id="categories-collapse" th:each="category : ${categories}">
+                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                        <li>
+                            <a th:href="@{/products/category/{category}(category=${category.name})}" th:text="${category.name}" class="nav-link active"></a>
+                            <a th:href="@{/products/addCategory(id=${category.id})}" class="ms-1 link-secondary">Редактировать</a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+
+            <li class="nav-item">
+                <form action="/products/">
+                    <button class="btn btn-primary">Сбросить фильтр</button>
+                </form>
+            </li>
+
+        </ul>
+    </aside>
+</div>
+</nav>
+</body>
+</html>

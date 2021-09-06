@@ -2,13 +2,18 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+
     <title>Продукт по ID</title>
 </head>
 <body>
 <h1>Продукт</h1>
-<p th:text="'id: ' + ${product.get().id}" />
-<p th:text="'name: ' + ${product.get().name}" />
-<p th:text="'price: ' + ${product.get().price}" />
-<p th:text="'category: ' + ${product.get().category.name}" />
+<p th:text="'id: ' + ${product.id}"/>
+<p th:text="'name: ' + ${product.name}"/>
+<p th:text="'price: ' + ${product.price}"/>
+<p th:text="'category: ' + ${product.categories}"/>
 </body>
 </html>

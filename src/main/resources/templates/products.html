@@ -2,42 +2,58 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+
     <title>Продукты</title>
 </head>
 <body>
-<h1>Продукты</h1>
-<h3>Поиск по минимальной и максимальной цене</h3>
-<form th:action="@{'/products/price'}" method="get">
-    <input type="number"  th:name="min-price"/>
-    <input type="number"  th:name="max-price"/>
-    <button type="submit">Поиск</button>
-</form>
-<br>
-<h3>Поиск по названию</h3>
-<form th:action="@{'/products/name'}" method="get">
-    <input type="text"  th:name="text"/>
-    <button type="submit">Поиск</button>
-</form>
-<form action="/products/">
-    <button>Сбросить фильтр</button>
-</form>
-<table>
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>Наименование</th>
-        <th>Стоимость</th>
-        <th>Категория</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="p : ${products}">
-        <td th:text="${p.id}"/>
-        <td th:text="${p.name}"/>
-        <td th:text="${p.price}"/>
-        <td> <a th:text="${p.category.name}" th:href="@{/products/categories/{category}(category=${p.category.name})}"/> </td>
-    </tr>
-    </tbody>
-</table>
+<div th:replace="~{fragments/sidebar::sidebar}">Sidebar</div>
+
+<div class="container mt-15 mb-15">
+
+    <div th:replace="~{fragments/header::header}">Header</div>
+
+    <h1>Продукты</h1>
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        <div th:each="product : ${productList}" class="card me-2" style="width: 20rem;">
+            <img th:src="@{${product.imageLink}}" class="card-img-top" alt="product image">
+            <div class="card-body">
+                <h5 class="card-title" th:text="${product.name}">Product title</h5>
+                <p class="card-text" th:text="'Цена:' + ${product.price}">Price</p>
+                <a th:href="@{/products/addProduct(id=${product.id})}" href="#"
+                   class="btn btn-primary">Редактировать</a>
+                <a th:href="@{/products/delete(id=${product.id})}" href="#" class="btn btn-danger">Удалить</a>
+            </div>
+        </div>
+    </div>
+
+    <ul class="pagination" th:if="${page.getTotalPages() > 1}">
+        <li class="page-item" th:classappend="${page.isFirst() ? 'disabled' : ''}">
+            <a class="page-link" th:href="@{'/products/page?pageNum=1' }">First</a>
+        </li>
+
+        <li class="page-item" th:classappend="${page.isFirst() ? 'disabled' : ''}">
+            <a class="page-link" th:href="@{'/products/page?pageNum=' + ${currentPage - 1}}">Previous</a>
+
+        <li class="page-item" th:each="i: ${#numbers.sequence(1, page.getTotalPages())}"
+            th:classappend="${currentPage == i ? 'disabled' : ''}">
+            <a class="page-link" th:href="@{'/products/page?pageNum=' + ${i}}">[[${i}]]</a>
+        </li>
+
+        <li class="page-item" th:classappend="${page.isLast() ? 'disabled' : ''}">
+            <a class="page-link" th:href="@{'/products/page?pageNum=' + ${currentPage + 1}}">Next</a>
+        </li>
+
+        <li class="page-item" th:classappend="${page.isLast() ? 'disabled' : ''}">
+            <a class="page-link" th:href="@{'/products/page?pageNum=' + ${page.getTotalPages()}}">Last</a>
+        </li>
+    </ul>
+
+    <div th:replace="~{fragments/footer::footer}">
+        Footer
+    </div>
+</div>
 </body>
 </html>
